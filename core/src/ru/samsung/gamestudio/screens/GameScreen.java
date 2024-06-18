@@ -5,6 +5,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
+
 import ru.samsung.gamestudio.*;
 import ru.samsung.gamestudio.components.*;
 import ru.samsung.gamestudio.managers.ContactManager;
@@ -14,6 +15,7 @@ import ru.samsung.gamestudio.objects.ShipObject;
 import ru.samsung.gamestudio.objects.TrashObject;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class GameScreen extends ScreenAdapter {
 
@@ -111,12 +113,31 @@ public class GameScreen extends ScreenAdapter {
 
         if (gameSession.state == GameState.PLAYING) {
             if (gameSession.shouldSpawnTrash()) {
-                TrashObject trashObject = new TrashObject(
-                        GameSettings.TRASH_WIDTH, GameSettings.TRASH_HEIGHT,
-                        GameResources.TRASH_IMG_PATH,
-                        myGdxGame.world
-                );
-                trashArray.add(trashObject);
+                TrashObject trashObject;
+                Random random = new Random();
+                switch (random.nextInt(3)) {
+                    case 0:
+                    case 1:
+                        //Препятствие первой сложности
+                        trashObject = new TrashObject(
+                                GameSettings.TRASH_WIDTH, GameSettings.TRASH_HEIGHT,
+                                GameResources.TRASH_IMG_PATH,
+                                myGdxGame.world,
+                                1
+                        );
+                        trashArray.add(trashObject);
+                        break;
+                    case 2:
+                        //Препятствие второй сложности
+                        trashObject = new TrashObject(
+                                GameSettings.TRASH3_WIDTH, GameSettings.TRASH3_HEIGHT,
+                                GameResources.TRASH3FULL_IMG_PATH,
+                                myGdxGame.world,
+                                3
+                        );
+                        trashArray.add(trashObject);
+                        break;
+                }
             }
 
             if (shipObject.needToShoot()) {
@@ -219,7 +240,8 @@ public class GameScreen extends ScreenAdapter {
 
             if (!trashArray.get(i).isAlive()) {
                 gameSession.destructionRegistration();
-                if (myGdxGame.audioManager.isSoundOn) myGdxGame.audioManager.explosionSound.play(0.2f);
+                if (myGdxGame.audioManager.isSoundOn)
+                    myGdxGame.audioManager.explosionSound.play(0.2f);
             }
 
             if (hasToBeDestroyed) {
