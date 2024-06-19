@@ -16,6 +16,7 @@ import ru.samsung.gamestudio.objects.ShipObject;
 import ru.samsung.gamestudio.objects.TrashObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 public class GameScreen extends ScreenAdapter {
@@ -336,39 +337,44 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private void updateTrash() {
-        for (int i = 0; i < trashArray.size(); i++) {
+        for (Iterator<TrashObject> iterator = trashArray.iterator(); iterator.hasNext(); ) {
+            TrashObject trash = iterator.next();
 
-            boolean hasToBeDestroyed = !trashArray.get(i).isAlive() || !trashArray.get(i).isInFrame();
+            boolean hasToBeDestroyed = !trash.isAlive() || !trash.isInFrame();
 
-            if (!trashArray.get(i).isAlive()) {
+            if (!trash.isAlive()) {
                 gameSession.destructionRegistration();
                 if (myGdxGame.audioManager.isSoundOn)
                     myGdxGame.audioManager.explosionSound.play(0.2f);
             }
 
             if (hasToBeDestroyed) {
-                myGdxGame.world.destroyBody(trashArray.get(i).body);
-                trashArray.remove(i--);
+                myGdxGame.world.destroyBody(trash.body);
+                iterator.remove();
             }
         }
     }
 
     private void updateKit() {
-        for (int i = 0; i < kitArray.size(); i++) {
-            boolean hasToBeDestroyed = !kitArray.get(i).isAlive();
+        for (Iterator<KitObject> iterator = kitArray.iterator(); iterator.hasNext(); ) {
+            KitObject kit = iterator.next();
+
+            boolean hasToBeDestroyed = !kit.isAlive();
 
             if (hasToBeDestroyed) {
-                myGdxGame.world.destroyBody(kitArray.get(i).body);
-                kitArray.remove(i--);
+                myGdxGame.world.destroyBody(kit.body);
+                iterator.remove();
             }
         }
     }
 
     private void updateBullets() {
-        for (int i = 0; i < bulletArray.size(); i++) {
-            if (bulletArray.get(i).hasToBeDestroyed()) {
-                myGdxGame.world.destroyBody(bulletArray.get(i).body);
-                bulletArray.remove(i--);
+        for (Iterator<BulletObject> iterator = bulletArray.iterator(); iterator.hasNext(); ) {
+            BulletObject bullet = iterator.next();
+
+            if (bullet.hasToBeDestroyed()) {
+                myGdxGame.world.destroyBody(bullet.body);
+                iterator.remove();
             }
         }
     }
