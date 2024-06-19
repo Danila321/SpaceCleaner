@@ -42,6 +42,10 @@ public class GameObject {
         // all physics objects could be hit
     }
 
+    public void addLive() {
+
+    }
+
     public int getX() {
         return (int) (body.getPosition().x / SCALE);
     }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.TimeUtils;
+
 import ru.samsung.gamestudio.GameSettings;
 
 public class ShipObject extends GameObject {
@@ -63,6 +64,12 @@ public class ShipObject extends GameObject {
     @Override
     public void hit() {
         livesLeft -= 1;
+    }
+
+    public void addLive() {
+        if (livesLeft < 3) {
+            livesLeft++;
+        }
     }
 
     public boolean isAlive() {

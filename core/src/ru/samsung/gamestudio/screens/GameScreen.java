@@ -11,6 +11,7 @@ import ru.samsung.gamestudio.components.*;
 import ru.samsung.gamestudio.managers.ContactManager;
 import ru.samsung.gamestudio.managers.MemoryManager;
 import ru.samsung.gamestudio.objects.BulletObject;
+import ru.samsung.gamestudio.objects.KitObject;
 import ru.samsung.gamestudio.objects.ShipObject;
 import ru.samsung.gamestudio.objects.TrashObject;
 
@@ -25,6 +26,7 @@ public class GameScreen extends ScreenAdapter {
 
     ArrayList<TrashObject> trashArray;
     ArrayList<BulletObject> bulletArray;
+    ArrayList<KitObject> kitArray;
 
     ContactManager contactManager;
 
@@ -34,6 +36,9 @@ public class GameScreen extends ScreenAdapter {
     LiveView liveView;
     TextView scoreTextView;
     ButtonView pauseButton;
+    TextView freezeTimeText;
+    TextView freezeReadyText;
+    ButtonView freezeButton;
 
     // PAUSED state UI
     ImageView fullBlackoutView;
@@ -54,6 +59,7 @@ public class GameScreen extends ScreenAdapter {
 
         trashArray = new ArrayList<>();
         bulletArray = new ArrayList<>();
+        kitArray = new ArrayList<>();
 
         shipObject = new ShipObject(
                 GameSettings.SCREEN_WIDTH / 2, 150,
@@ -70,6 +76,14 @@ public class GameScreen extends ScreenAdapter {
                 605, 1200,
                 46, 54,
                 GameResources.PAUSE_IMG_PATH
+        );
+
+        freezeTimeText = new TextView(myGdxGame.commonWhiteFont, 50, 395);
+        freezeReadyText = new TextView(myGdxGame.commonWhiteFont, 35, 395);
+        freezeButton = new ButtonView(
+                25, 300,
+                80, 80,
+                GameResources.FREEZE_IMG_PATH
         );
 
         fullBlackoutView = new ImageView(0, 0, GameResources.BLACKOUT_FULL_IMG_PATH);
@@ -140,6 +154,14 @@ public class GameScreen extends ScreenAdapter {
                 }
             }
 
+            if (gameSession.shouldSpawnKit()) {
+                KitObject kitObject = new KitObject(
+                        GameSettings.KIT_WIDTH, GameSettings.KIT_HEIGHT,
+                        GameResources.KIT_IMG_PATH,
+                        myGdxGame.world);
+                kitArray.add(kitObject);
+            }
+
             if (shipObject.needToShoot()) {
                 BulletObject laserBullet = new BulletObject(
                         shipObject.getX(), shipObject.getY() + shipObject.height / 2,
@@ -151,6 +173,25 @@ public class GameScreen extends ScreenAdapter {
                 if (myGdxGame.audioManager.isSoundOn) myGdxGame.audioManager.shootSound.play();
             }
 
+            if (gameSession.isFreezing()){
+                if (gameSession.freezingTime() >= 1){
+                    backgroundView = new MovingBackgroundView(GameResources.BACKGROUND_FREEZE_IMG_PATH);
+                    freezeTimeText.setText(String.valueOf(gameSession.freezingTime()));
+                    freezeReadyText.setText("");
+                } else {
+                    gameSession.stopFreeze();
+                    backgroundView = new MovingBackgroundView(GameResources.BACKGROUND_IMG_PATH);
+                }
+            } else {
+                if (gameSession.reloadFreezingTime() >= 1){
+                    freezeTimeText.setText(String.valueOf(gameSession.reloadFreezingTime()));
+                    freezeReadyText.setText("");
+                } else {
+                    freezeTimeText.setText("");
+                    freezeReadyText.setText("Ready!");
+                }
+            }
+
             if (!shipObject.isAlive()) {
                 gameSession.endGame();
                 recordsListView.setRecords(MemoryManager.loadRecordsTable());
@@ -158,6 +199,7 @@ public class GameScreen extends ScreenAdapter {
 
             updateTrash();
             updateBullets();
+            updateKit();
             backgroundView.move();
             gameSession.updateScore();
             scoreTextView.setText("Score: " + gameSession.getScore());
@@ -178,7 +220,13 @@ public class GameScreen extends ScreenAdapter {
                     if (pauseButton.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
                         gameSession.pauseGame();
                     }
-                    shipObject.move(myGdxGame.touch);
+                    if (freezeButton.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
+                        if (gameSession.reloadFreezingTime() <= 0){
+                            gameSession.freeze();
+                        }
+                    } else {
+                        shipObject.move(myGdxGame.touch);
+                    }
                     break;
 
                 case PAUSED:
@@ -212,10 +260,14 @@ public class GameScreen extends ScreenAdapter {
         for (TrashObject trash : trashArray) trash.draw(myGdxGame.batch);
         shipObject.draw(myGdxGame.batch);
         for (BulletObject bullet : bulletArray) bullet.draw(myGdxGame.batch);
+        for (KitObject kit : kitArray) kit.draw(myGdxGame.batch);
         topBlackoutView.draw(myGdxGame.batch);
         scoreTextView.draw(myGdxGame.batch);
         liveView.draw(myGdxGame.batch);
         pauseButton.draw(myGdxGame.batch);
+        freezeTimeText.draw(myGdxGame.batch);
+        freezeReadyText.draw(myGdxGame.batch);
+        freezeButton.draw(myGdxGame.batch);
 
         if (gameSession.state == GameState.PAUSED) {
             fullBlackoutView.draw(myGdxGame.batch);
@@ -247,6 +299,17 @@ public class GameScreen extends ScreenAdapter {
             if (hasToBeDestroyed) {
                 myGdxGame.world.destroyBody(trashArray.get(i).body);
                 trashArray.remove(i--);
+            }
+        }
+    }
+
+    private void updateKit() {
+        for (int i = 0; i < kitArray.size(); i++) {
+            boolean hasToBeDestroyed = !kitArray.get(i).isAlive();
+
+            if (hasToBeDestroyed) {
+                myGdxGame.world.destroyBody(kitArray.get(i).body);
+                kitArray.remove(i--);
             }
         }
     }

@@ -42,12 +42,12 @@ public class TrashObject extends GameObject {
     @Override
     public void hit() {
         livesLeft -= 1;
-        if (difficult == 2){
-            if (livesLeft == 1){
+        if (difficult == 2) {
+            if (livesLeft == 1) {
                 this.texture = new Texture(GameResources.TRASH2HALF_IMG_PATH);
             }
         } else if (difficult == 3) {
-            if (livesLeft == 2){
+            if (livesLeft == 2) {
                 this.texture = new Texture(GameResources.TRASH3TWOTHIRD_IMG_PATH);
             } else {
                 this.texture = new Texture(GameResources.TRASH3ONETHIRD_IMG_PATH);

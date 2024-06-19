@@ -1,6 +1,7 @@
 package ru.samsung.gamestudio.managers;
 
 import com.badlogic.gdx.physics.box2d.*;
+
 import ru.samsung.gamestudio.GameSettings;
 import ru.samsung.gamestudio.objects.GameObject;
 
@@ -28,7 +29,18 @@ public class ContactManager {
 
                     ((GameObject) fixA.getUserData()).hit();
                     ((GameObject) fixB.getUserData()).hit();
+                }
 
+                if (cDef == GameSettings.SHIP_BIT && cDef2 == GameSettings.KIT_BIT) {
+                    ((GameObject) fixA.getUserData()).addLive();
+                    ((GameObject) fixB.getUserData()).hit();
+                } else if (cDef2 == GameSettings.SHIP_BIT && cDef == GameSettings.KIT_BIT) {
+                    ((GameObject) fixB.getUserData()).addLive();
+                    ((GameObject) fixA.getUserData()).hit();
+                } else if (cDef == GameSettings.BULLET_BIT && cDef2 == GameSettings.KIT_BIT
+                        || cDef2 == GameSettings.BULLET_BIT && cDef == GameSettings.KIT_BIT) {
+                    ((GameObject) fixA.getUserData()).hit();
+                    ((GameObject) fixB.getUserData()).hit();
                 }
             }
 
