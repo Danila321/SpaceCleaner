@@ -13,6 +13,12 @@ public class GameResources {
 
     public static final String BUTTON_SHORT_BG_IMG_PATH = "textures/button_background_short.png";
     public static final String BUTTON_LONG_BG_IMG_PATH = "textures/button_background_long.png";
+    public static final String BUTTON_LEVEL1 = "textures/level1.png";
+    public static final String BUTTON_LEVEL1_CHECKED = "textures/level1_checked.png";
+    public static final String BUTTON_LEVEL2 = "textures/level2.png";
+    public static final String BUTTON_LEVEL2_CHECKED = "textures/level2_checked.png";
+    public static final String BUTTON_LEVEL3 = "textures/level3.png";
+    public static final String BUTTON_LEVEL3_CHECKED = "textures/level3_checked.png";
 
     public static final String PAUSE_IMG_PATH = "textures/pause_icon.png";
     public static final String LIVE_IMG_PATH = "textures/life.png";

@@ -43,6 +43,11 @@ public class ButtonView extends View {
         if (bitmapFont != null) bitmapFont.draw(batch, text, textX, textY);
     }
 
+    public void setTexture(String texturePath) {
+        this.texture.dispose();
+        this.texture = new Texture(texturePath);
+    }
+
     @Override
     public void dispose() {
         texture.dispose();

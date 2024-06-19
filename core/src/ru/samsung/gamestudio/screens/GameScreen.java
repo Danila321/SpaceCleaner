@@ -128,11 +128,9 @@ public class GameScreen extends ScreenAdapter {
         if (gameSession.state == GameState.PLAYING) {
             if (gameSession.shouldSpawnTrash()) {
                 TrashObject trashObject;
-                Random random = new Random();
-                switch (random.nextInt(3)) {
-                    case 0:
+                switch (GameSettings.LEVEL) {
                     case 1:
-                        //Препятствие первой сложности
+                        // Первый уровень сложности
                         trashObject = new TrashObject(
                                 GameSettings.TRASH_WIDTH, GameSettings.TRASH_HEIGHT,
                                 GameResources.TRASH_IMG_PATH,
@@ -142,16 +140,68 @@ public class GameScreen extends ScreenAdapter {
                         trashArray.add(trashObject);
                         break;
                     case 2:
-                        //Препятствие второй сложности
-                        trashObject = new TrashObject(
-                                GameSettings.TRASH3_WIDTH, GameSettings.TRASH3_HEIGHT,
-                                GameResources.TRASH3FULL_IMG_PATH,
-                                myGdxGame.world,
-                                3
-                        );
-                        trashArray.add(trashObject);
+                        // Второй уровень сложности
+                        switch (new Random().nextInt(2)) {
+                            case 0:
+                                //Препятствие первой сложности
+                                trashObject = new TrashObject(
+                                        GameSettings.TRASH_WIDTH, GameSettings.TRASH_HEIGHT,
+                                        GameResources.TRASH_IMG_PATH,
+                                        myGdxGame.world,
+                                        1
+                                );
+                                trashArray.add(trashObject);
+                                break;
+                            case 1:
+                                //Препятствие второй сложности
+                                trashObject = new TrashObject(
+                                        GameSettings.TRASH2_WIDTH, GameSettings.TRASH2_HEIGHT,
+                                        GameResources.TRASH2FULL_IMG_PATH,
+                                        myGdxGame.world,
+                                        2
+                                );
+                                trashArray.add(trashObject);
+                                break;
+                        }
+                        break;
+                    case 3:
+                        // Третий уровень сложности
+                        switch (new Random().nextInt(4)) {
+                            case 0:
+                            case 1:
+                                //Препятствие первой сложности
+                                trashObject = new TrashObject(
+                                        GameSettings.TRASH_WIDTH, GameSettings.TRASH_HEIGHT,
+                                        GameResources.TRASH_IMG_PATH,
+                                        myGdxGame.world,
+                                        1
+                                );
+                                trashArray.add(trashObject);
+                                break;
+                            case 2:
+                                //Препятствие второй сложности
+                                trashObject = new TrashObject(
+                                        GameSettings.TRASH2_WIDTH, GameSettings.TRASH2_HEIGHT,
+                                        GameResources.TRASH2FULL_IMG_PATH,
+                                        myGdxGame.world,
+                                        2
+                                );
+                                trashArray.add(trashObject);
+                                break;
+                            case 3:
+                                //Препятствие третьей сложности
+                                trashObject = new TrashObject(
+                                        GameSettings.TRASH3_WIDTH, GameSettings.TRASH3_HEIGHT,
+                                        GameResources.TRASH3FULL_IMG_PATH,
+                                        myGdxGame.world,
+                                        3
+                                );
+                                trashArray.add(trashObject);
+                                break;
+                        }
                         break;
                 }
+
             }
 
             if (gameSession.shouldSpawnKit()) {
@@ -173,8 +223,8 @@ public class GameScreen extends ScreenAdapter {
                 if (myGdxGame.audioManager.isSoundOn) myGdxGame.audioManager.shootSound.play();
             }
 
-            if (gameSession.isFreezing()){
-                if (gameSession.freezingTime() >= 1){
+            if (gameSession.isFreezing()) {
+                if (gameSession.freezingTime() >= 1) {
                     backgroundView = new MovingBackgroundView(GameResources.BACKGROUND_FREEZE_IMG_PATH);
                     freezeTimeText.setText(String.valueOf(gameSession.freezingTime()));
                     freezeReadyText.setText("");
@@ -183,7 +233,7 @@ public class GameScreen extends ScreenAdapter {
                     backgroundView = new MovingBackgroundView(GameResources.BACKGROUND_IMG_PATH);
                 }
             } else {
-                if (gameSession.reloadFreezingTime() >= 1){
+                if (gameSession.reloadFreezingTime() >= 1) {
                     freezeTimeText.setText(String.valueOf(gameSession.reloadFreezingTime()));
                     freezeReadyText.setText("");
                 } else {
@@ -221,7 +271,7 @@ public class GameScreen extends ScreenAdapter {
                         gameSession.pauseGame();
                     }
                     if (freezeButton.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
-                        if (gameSession.reloadFreezingTime() <= 0){
+                        if (gameSession.reloadFreezingTime() <= 0) {
                             gameSession.freeze();
                         }
                     } else {

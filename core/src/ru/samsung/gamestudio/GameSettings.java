@@ -7,6 +7,10 @@ public class GameSettings {
     public static final int SCREEN_WIDTH = 720;
     public static final int SCREEN_HEIGHT = 1280;
 
+    // Level
+
+    public static int LEVEL = 1;
+
     // Physics settings
 
     public static final float STEP_TIME = 1f / 60f;
