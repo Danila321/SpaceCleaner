@@ -25,8 +25,21 @@ public class GameResources {
 
     public static final String FREEZE_IMG_PATH = "textures/freeze.png";
 
+    public static String SHIP_IMG_PATH = "textures/ship1.png";
+    public static final String SHIP1_BACKGROUND_IMG_PATH = "textures/ship1_background.png";
+    public static final String SHIP2_BACKGROUND_IMG_PATH = "textures/ship2_background.png";
+    public static final String SHIP3_BACKGROUND_IMG_PATH = "textures/ship3_background.png";
+    public static final String SHIP4_BACKGROUND_IMG_PATH = "textures/ship4_background.png";
+    public static final String SHIP5_BACKGROUND_IMG_PATH = "textures/ship5_background.png";
+    public static final String SHIP6_BACKGROUND_IMG_PATH = "textures/ship6_background.png";
+    public static final String SHIP1_IMG_PATH = "textures/ship1.png";
+    public static final String SHIP2_IMG_PATH = "textures/ship2.png";
+    public static final String SHIP3_IMG_PATH = "textures/ship3.png";
+    public static final String SHIP4_IMG_PATH = "textures/ship4.png";
+    public static final String SHIP5_IMG_PATH = "textures/ship5.png";
+    public static final String SHIP6_IMG_PATH = "textures/ship6.png";
+
     public static final String BULLET_IMG_PATH = "textures/bullet.png";
-    public static final String SHIP_IMG_PATH = "textures/ship.png";
     public static final String TRASH_IMG_PATH = "textures/trash.png";
     public static final String TRASH2FULL_IMG_PATH = "textures/trash2full.png";
     public static final String TRASH2HALF_IMG_PATH = "textures/trash2half.png";

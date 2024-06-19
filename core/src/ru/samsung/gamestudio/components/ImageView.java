@@ -14,6 +14,11 @@ public class ImageView extends View {
         this.height = texture.getHeight() ;
     }
 
+    public void setTexture(String texturePath) {
+        this.texture.dispose();
+        this.texture = new Texture(texturePath);
+    }
+
     @Override
     public void draw(SpriteBatch batch) {
         batch.draw(texture, x, y, width, height);
